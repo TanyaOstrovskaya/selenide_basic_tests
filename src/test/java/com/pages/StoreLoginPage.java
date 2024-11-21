@@ -1,4 +1,4 @@
-package pages;
+package com.pages;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.open;
 @Slf4j
 public class StoreLoginPage {
 
-    public static final String GITHUB_PAGE_URL = "https://www.saucedemo.com/";
+    public static final String PAGE_URL = "https://www.saucedemo.com/";
     private static final String LOGIN_INPUT = "input[data-test=\"username\"]";
     private static final String PASSWORD_INPUT = "input[data-test=\"password\"]";
     private static final String SUBMIT_BTN = "input[data-test=\"login-button\"]";
@@ -21,7 +21,7 @@ public class StoreLoginPage {
     }
 
     public void navigate() {
-        open(GITHUB_PAGE_URL);
+        open(PAGE_URL);
     }
 
     public void login(String login, String pswd) {
@@ -38,8 +38,5 @@ public class StoreLoginPage {
     public String getLoginError() {
         return $(ERROR_LABEL).text();
     }
-//
-//
-//
 
 }

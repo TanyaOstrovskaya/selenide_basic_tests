@@ -1,20 +1,20 @@
+package com.estore;
+
+import com.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import pages.StoreLoginPage;
+import com.pages.StoreLoginPage;
 
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-public class StoreTest extends BaseTest {
+public class StoreLoginTest extends BaseTest {
 
-
-    public static final String STANDARD_USER = "standard_user";
-    public static final String SECRET = "secret_sauce";
     public static final String BLOCKED_USER = "locked_out_user";
 
 
@@ -28,7 +28,7 @@ public class StoreTest extends BaseTest {
     }
 
     @Test
-    public void cantLoginAsBlockedUser() {
+    public void cannotLoginAsBlockedUser() {
         StoreLoginPage page = new StoreLoginPage();
         page.navigate();
         page.login(BLOCKED_USER, SECRET);

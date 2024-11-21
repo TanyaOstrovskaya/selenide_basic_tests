@@ -1,4 +1,4 @@
-package pages;
+package com.pages;
 
 
 import com.codeborne.selenide.ElementsCollection;
@@ -26,7 +26,7 @@ public class GithubPage {
     private static final String TITLE = "[data-hovercard-type=\"pull_request\"]";
     private static final String DATE = "relative-time";
     private static final String ROWS = "div[data-id]";
-    private static final String PAGINATION = "[data-total-pages]";
+    private static final String PAGINATION = "[data-total-com.pages]";
     private SelenideElement searchField = $(SEARCH_INPUT);
     // todo should I store here elements or locators: SelenideElement vs String Locator
 
@@ -59,9 +59,9 @@ public class GithubPage {
 
     public List<Map<String, String>> collectAllRows() {
         String PAGE_QUERY = "?q=is:pr is:open &page=";
-        Integer pagination = Integer.parseInt($(PAGINATION).getAttribute("data-total-pages"));
+        Integer pagination = Integer.parseInt($(PAGINATION).getAttribute("data-total-com.pages"));
 
-        log.info("Collecting PR Autor,Title,Date rows, total pages to parse: [{}]", pagination);
+        log.info("Collecting PR Autor,Title,Date rows, total com.pages to parse: [{}]", pagination);
         List<Map<String, String>> prData = new ArrayList<>();
 
 
