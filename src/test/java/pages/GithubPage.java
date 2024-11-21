@@ -1,13 +1,21 @@
 package pages;
 
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 
+@Slf4j
 public class GithubPage {
 
     public static final String GITHUB_PAGE_URL = "https://github.com/SeleniumHQ/selenium/pulls";
@@ -20,7 +28,7 @@ public class GithubPage {
     private static final String ROWS = "div[data-id]";
     private static final String PAGINATION = "[data-total-pages]";
     private SelenideElement searchField = $(SEARCH_INPUT);
-
+    // todo should I store here elements or locators: SelenideElement vs String Locator
 
     public GithubPage() {
     }
@@ -30,6 +38,7 @@ public class GithubPage {
     }
 
     public void searchFor(String text) {
+        log.info("Searching for {}", text);
         searchField.val(text);
         searchField.pressEnter();
     }
@@ -47,5 +56,36 @@ public class GithubPage {
                 .mapToObj(c -> String.valueOf((char) c))
                 .collect(Collectors.joining());
     }
+
+    public List<Map<String, String>> collectAllRows() {
+        String PAGE_QUERY = "?q=is:pr is:open &page=";
+        Integer pagination = Integer.parseInt($(PAGINATION).getAttribute("data-total-pages"));
+
+        log.info("Collecting PR Autor,Title,Date rows, total pages to parse: [{}]", pagination);
+        List<Map<String, String>> prData = new ArrayList<>();
+
+
+        while (pagination > 0) {
+            int pageRows = $$(ROWS).size();
+            ElementsCollection authorsLocator = $$(AUTOR);
+            ElementsCollection titles = $$(TITLE);
+            ElementsCollection dates = $$(DATE);
+
+            for (int i = 0; i < pageRows; i++) {
+                Map<String, String> prDetails = new HashMap<>();
+                prDetails.put("Author", authorsLocator.get(i).innerText().trim());
+                prDetails.put("Title", titles.get(i).innerText().trim());
+                prDetails.put("Date", dates.get(i).getAttribute("datetime").trim());
+                prData.add(prDetails);
+            }
+            String nextPage = GITHUB_PAGE_URL + PAGE_QUERY + pagination;
+            log.info("Goint to [{}] page", nextPage);
+            open(nextPage);
+            pagination--;
+        }
+
+        return prData;
+    }
+
 
 }
